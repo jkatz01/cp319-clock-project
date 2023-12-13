@@ -26,7 +26,7 @@ architecture structure of clock is
     signal reset_1 : std_logic := '1';
     signal ctrl_1 : std_logic_vector(1 downto 0) := "01";
     signal D_1 : unsigned(5 downto 0) := "000000";
-    signal max_val_1 : unsigned(5 downto 0) := "001001"; --MAX = 10
+    signal max_val_1 : unsigned(5 downto 0) := "001001"; --MAX = 9 NOTICE: minutes are set to 10 seconds each for clarity in simulation
     signal Q_1 : unsigned(5 downto 0);
     
     
@@ -34,7 +34,7 @@ architecture structure of clock is
     signal reset_2 : std_logic := '1';
     signal ctrl_2 : std_logic_vector(1 downto 0) := "00"; --Only set to 01 when seconds=60 to increment minutes
     signal D_2 : unsigned(5 downto 0) := "000000";
-    signal max_val_2 : unsigned(5 downto 0) := "001001"; --MAX = 9
+    signal max_val_2 : unsigned(5 downto 0) := "001001"; --MAX = 9 NOTICE: seconds are reset at 10 seconds for clarity in simulation
     signal Q_2 : unsigned(5 downto 0);
     
     signal alarm_q_sig : std_logic := '0';
@@ -57,8 +57,8 @@ cnt_2: counter port map(
         max_val => max_val_2);
 
     -- initialize all signals so that they are not XX
-    reset_1 <= '0', '1' after 20ns;
-    reset_2 <= '0', '1' after 20ns;
+    reset_1 <= '0', '1' after 10ns;
+    reset_2 <= '0', '1' after 10ns;
 
 	
 
