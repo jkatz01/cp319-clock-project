@@ -38,6 +38,25 @@ architecture structure of clock is
     signal Q_2 : unsigned(5 downto 0);
     
     signal alarm_q_sig : std_logic := '0';
+
+    component split
+     port ( bcd : in unsigned(5 downto 0); 
+  		splittable : out std_logic_vector(6 downto 0));
+     end component;
+     
+     component split_to_seg7
+       port ( splittable : in std_logic_vector(6 downto 0); 
+        segments1 : out std_logic_vector(6 downto 0);
+        segments2 : out std_logic_vector(6 downto 0)); 
+	  end component;
+     
+	 signal msplit : std_logic_vector(6 downto 0);
+     signal ssplit : std_logic_vector(6 downto 0);
+     
+     signal Seg_m1 : std_logic_vector(6 downto 0);
+     signal Seg_m2 : std_logic_vector(6 downto 0);
+     signal Seg_s1 : std_logic_vector(6 downto 0);
+     signal Seg_s2 : std_logic_vector(6 downto 0);   
     
 begin
 cnt_1: counter port map(
@@ -79,6 +98,23 @@ process(clk)
     
     Q_s <= Q_1;
     Q_m <= Q_2;
-    alarm_q <= alarm_q_sig;
+    split_1: split port map(
+	bcd => Q_s,
+        splittable => ssplit);
+
+    split_2: split port map(
+	bcd => Q_m,
+        splittable => msplit);
+        
+     segments1: split_to_seg7 port map(
+	splittable => ssplit,
+        segments1 => Seg_s1,
+        segments2 => Seg_s2);
+        
+     segments2: split_to_seg7 port map(
+	splittable => msplit,
+        segments1 => Seg_m1,
+        segments2 => Seg_m2);
+   alarm_q <= alarm_q_sig;
 
 end structure;
