@@ -8,7 +8,11 @@ entity clock is
            alarm_in_m : in unsigned(5 downto 0);
            Q_s : out unsigned(5 downto 0);
            Q_m : out unsigned(5 downto 0);
-           alarm_q : out STD_LOGIC);
+           alarm_q : out STD_LOGIC;
+           Seg_m1 : out std_logic_vector(6 downto 0);
+     	   Seg_m2 : out std_logic_vector(6 downto 0);
+           Seg_s1 : out std_logic_vector(6 downto 0);
+           Seg_s2 : out std_logic_vector(6 downto 0));
 end clock;
 
 architecture structure of clock is   
@@ -39,7 +43,22 @@ architecture structure of clock is
     
     signal alarm_q_sig : std_logic := '0';
     
+    component split
+     port ( bcd : in unsigned(5 downto 0); 
+  		splittable : out std_logic_vector(6 downto 0));
+     end component;
+     
+     component split_to_seg7
+       port ( splittable : in std_logic_vector(6 downto 0); 
+        segments1 : out std_logic_vector(6 downto 0);
+        segments2 : out std_logic_vector(6 downto 0)); 
+	  end component;
+     
+	 signal msplit : std_logic_vector(6 downto 0);
+     signal ssplit : std_logic_vector(6 downto 0);                          
+    
 begin
+
 cnt_1: counter port map(
         clk => clk,
         D => D_1,
@@ -55,12 +74,11 @@ cnt_2: counter port map(
         ctrl => ctrl_2,
         reset => reset_2,
         max_val => max_val_2);
-
+		
     -- initialize all signals so that they are not XX
     reset_1 <= '0', '1' after 10ns;
     reset_2 <= '0', '1' after 10ns;
-
-	
+    
 
 process(clk)
     begin
@@ -76,9 +94,29 @@ process(clk)
 			end if;
         end if;
     end process;
-    
+
     Q_s <= Q_1;
     Q_m <= Q_2;
+  
+  split_1: split port map(
+		bcd => Q_s,
+        splittable => ssplit);
+
+  split_2: split port map(
+		bcd => Q_m,
+        splittable => msplit);
+        
+  segments1: split_to_seg7 port map(
+		splittable => ssplit,
+        segments1 => Seg_s1,
+        segments2 => Seg_s2);
+        
+  segments2: split_to_seg7 port map(
+		splittable => msplit,
+        segments1 => Seg_m1,
+        segments2 => Seg_m2);
+
     alarm_q <= alarm_q_sig;
+
 
 end structure;
