@@ -34,7 +34,6 @@ begin
       when "011" => segments1 <= "1111001"; 
       when "100" => segments1 <= "0110011"; 
       when "101" => segments1 <= "1011011"; 
-      when "110" => segments1 <= "1011111"; 
       when others => segments1 <= "0000000";
     end case;
   end process; 
