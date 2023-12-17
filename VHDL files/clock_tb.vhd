@@ -55,9 +55,4 @@ begin
         wait for clk_period/2;
     end process;
 
-
-    
-end Behavior;
-
-    
 end Behavior;
