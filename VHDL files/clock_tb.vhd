@@ -13,7 +13,11 @@ architecture Behavior of clock_tb is
            alarm_in_m : in unsigned(5 downto 0);
            Q_s : out unsigned(5 downto 0);
            Q_m : out unsigned(5 downto 0);
-           alarm_q : out STD_LOGIC);
+           alarm_q : out STD_LOGIC;
+           Seg_m1 : out std_logic_vector(6 downto 0);
+     	   Seg_m2 : out std_logic_vector(6 downto 0);
+           Seg_s1 : out std_logic_vector(6 downto 0);
+           Seg_s2 : out std_logic_vector(6 downto 0));
     end component;
     
     signal clk : std_logic := '0';
@@ -22,6 +26,10 @@ architecture Behavior of clock_tb is
     signal alarm_q : std_logic;
     signal Q_s : unsigned(5 downto 0);
     signal Q_m : unsigned(5 downto 0);
+    signal Seg_m1 : std_logic_vector(6 downto 0);
+    signal Seg_m2 : std_logic_vector(6 downto 0);
+    signal Seg_s1 : std_logic_vector(6 downto 0);
+    signal Seg_s2 : std_logic_vector(6 downto 0);
     
     constant clk_period : time := 10 ns;
     
@@ -33,7 +41,11 @@ begin
         alarm_in_m => alarm_in_m,
         Q_s => Q_s,
         Q_m => Q_m,
-        alarm_q => alarm_q);
+        alarm_q => alarm_q,
+        Seg_m1 => Seg_m1,
+        Seg_m2 => Seg_m2,
+        Seg_s1 => Seg_s1,
+        Seg_s2 => Seg_s2);
         
     clk_process : process
     begin
@@ -43,6 +55,9 @@ begin
         wait for clk_period/2;
     end process;
 
+
+    
+end Behavior;
 
     
 end Behavior;
